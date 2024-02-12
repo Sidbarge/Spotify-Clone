@@ -300,7 +300,7 @@ body{
        background-color: black;
     }
     .right{
-        height: 90vh;
+        height: 92vh;
         width: 100vw;
         transition: all 1s ease-out;
     }
