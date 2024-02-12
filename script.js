@@ -25,7 +25,8 @@ async function getsongs(folder) {
     console.log(a, "a")
     console.log(folder)
     let response = await a.text();
-    // console.log(response,"response")
+
+    console.log(response,"response")
     let div = document.createElement("div")
     div.innerHTML = response
     let as = div.getElementsByTagName("a")
