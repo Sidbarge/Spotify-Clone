@@ -1,9 +1,6 @@
 console.log("Let's Write javascript")
 let currSong = new Audio()
 let songs;
-let wordsToReplace = ["%20", "songs/"];   //to replace the words with space
-let replacementWord = " ";
-let regexPattern = new RegExp(wordsToReplace.join('|'), 'gi');
 function formatTime(totalSeconds) {
     if(isNaN(totalSeconds) || totalSeconds<0){
         return "00:00";
@@ -22,10 +19,10 @@ function formatTime(totalSeconds) {
 }
 
 async function getsongs() {
-    let a = await fetch("songs/")
-    console.log(a,"a")
+    let a = await fetch("/songs/")
+    // console.log(a,"a")
     let response = await a.text();
-    console.log(response,"response")
+    // console.log(response,"response")
     let div = document.createElement("div")
     div.innerHTML = response
     let as = div.getElementsByTagName("a")
@@ -33,7 +30,7 @@ async function getsongs() {
     for (let index = 0; index < as.length; index++) {
         const element = as[index];
         if (element.href.endsWith(".mp3")) {
-            songs.push(element.href)
+            songs.push(element.href.split("/songs/")[1])
         }
     }
 
@@ -51,14 +48,14 @@ const playmusic = (track, pause = false) => {
         currSong.play()
         plays.src = "btn/pause.svg"
     }
-        document.querySelector(".songinfo").innerHTML = track.replace(regexPattern, replacementWord)
+        document.querySelector(".songinfo").innerHTML = decodeURI(track)
         document.querySelector(".songtime").innerHTML = "00:00/00:00"
 }
 // getsongs()
 async function main() {
     //Get the list of all the songs
     songs = await getsongs()
-    let firstsong = songs[0].replace(regexPattern, replacementWord).trim()
+    let firstsong = songs[0].replaceAll("%20", " ").trim()
     // console.log(firstsong, "hello")
     playmusic(firstsong, true)
     // console.log(songs)
@@ -72,7 +69,7 @@ async function main() {
                         <li>
                             <img class="invert" src="img/music.svg" alt="">
                             <div class="info">
-                                <div>${song.replace(regexPattern, replacementWord)}</div>
+                            <div> ${song.replaceAll("%20", " ")}</div>
                                 <div>Sid</div>
                             </div>
                             <div class="playnow">
@@ -132,26 +129,23 @@ async function main() {
 
     //Add an event listener to the previous
     previous.addEventListener("click",()=>{
-        // console.log("Previous clicked")
-        let index=songs.indexOf(currSong.src)
-        // console.log(currSong.src.split('/').slice(-1) [0])
-        // console.log(currSong.src)
-        // console.log(songs[1],index)
-        if((index-1)>=0){
-            let previousmusic=songs[index-1].split('/').slice(-1) [0]   //Used to remove the http://127.0.0.1:5500/songs/ part of song link to create a valid link
-            playmusic(previousmusic)
+        currSong.pause()
+        console.log("Previous clicked")
+        let index = songs.indexOf(currSong.src.split("/").slice(-1)[0])   //Used to remove the http://127.0.0.1:5500/songs/ part of song link to create a valid link
+        if ((index - 1) >= 0) {
+            playmusic(songs[index - 1])
         }
+       
     })
     //Add an event listener to the next
     next.addEventListener("click",()=>{
         // console.log("next clicked")
-        let index=songs.indexOf(currSong.src)
-        // console.log(currSong.src.split('/').slice(-1) [0])
-        // console.log(currSong.src)
-        // console.log(songs[1],index)
-        if((index+1)<songs.length){
-            let nextmusic=songs[index+1].split('/').slice(-1) [0]   //Used to remove the http://127.0.0.1:5500/songs/ part of song link to create a valid link
-            playmusic(nextmusic)
+        currSong.pause()
+        console.log("Next clicked")
+
+        let index = songs.indexOf(currSong.src.split("/").slice(-1)[0])
+        if ((index + 1) < songs.length) {
+            playmusic(songs[index + 1])
         }
     })
 
