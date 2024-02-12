@@ -1,4 +1,4 @@
-console.log("Let's Write javascript")
+console.log("Hello")
 let currSong = new Audio()
 let songs;
 let currfolder;
@@ -22,11 +22,11 @@ function formatTime(totalSeconds) {
 async function getsongs(folder) {
     currfolder = folder;
     let a = await fetch(`/${folder}/`)
-    console.log(a, "a")
-    console.log(folder)
+    // console.log(a, "a")
+    console.log(folder,folder)
     let response = await a.text();
 
-    console.log(response,"response")
+    // console.log(response,"response")
     let div = document.createElement("div")
     div.innerHTML = response
     let as = div.getElementsByTagName("a")
@@ -83,29 +83,31 @@ const playmusic = (track, pause = false) => {
     document.querySelector(".songtime").innerHTML = "00:00/00:00"
 }
 
-async function displayAlbums(){
+async function displayAlbums() {
     let a = await fetch(`/songs/`)
     let response = await a.text();
     // console.log(response,"response")
     let div = document.createElement("div")
     div.innerHTML = response
-    let anchors=div.getElementsByTagName("a")
-    let cardContainer=document.querySelector(".cardContainer")
-    let array=Array.from(anchors)
+    let anchors = div.getElementsByTagName("a")
+    let cardContainer = document.querySelector(".cardContainer")
+    let array = Array.from(anchors)
     // console.log(array)
-        for (let index = 0; index < array.length; index++) {
-            const e = array[index];
-            
-        
-        if(e.href.includes("/songs/") && !e.href.includes(".htaccess")){
-            let folder=e.href.split("/").slice(-1)[0]
+    for (let index = 0; index < array.length; index++) {
+        const e = array[index];
+
+
+        if (e.href.includes("/songs/") && !e.href.includes(".htaccess")) {
+            let folder = e.href.split("/").slice(-1)[0]
 
             //Get the metadata of the folder
             let a = await fetch(`/songs/${folder}/info.json`)
+            console.log(a,"a")
             let response = await a.json();
+            console.log(response,"response")
             // console.log(response)
 
-            cardContainer.innerHTML=cardContainer.innerHTML+`
+            cardContainer.innerHTML = cardContainer.innerHTML + `
             <div data-folder="${folder}" class="card">
                 <div class="play">
                     <svg width="48" height="48" viewBox="0 0 24 24" fill="none"
@@ -212,20 +214,20 @@ async function main() {
     })
 
     //Add event listener to mute the track
-    document.querySelector(".volume>img").addEventListener("click",e=>{
+    document.querySelector(".volume>img").addEventListener("click", e => {
         console.log(e.target)
-        if(e.target.src.includes("volume.svg")){
-            e.target.src=e.target.src.replace("img/volume.svg" , "img/mute.svg")
-            currSong.volume=0
-            document.querySelector(".range").getElementsByTagName("input")[0].value=0
+        if (e.target.src.includes("volume.svg")) {
+            e.target.src = e.target.src.replace("img/volume.svg", "img/mute.svg")
+            currSong.volume = 0
+            document.querySelector(".range").getElementsByTagName("input")[0].value = 0
         }
-        else{
-            e.target.src=e.target.src.replace("img/mute.svg","img/volume.svg")
-            currSong.volume=0.10
-            document.querySelector(".range").getElementsByTagName("input")[0].value=20
+        else {
+            e.target.src = e.target.src.replace("img/mute.svg", "img/volume.svg")
+            currSong.volume = 0.10
+            document.querySelector(".range").getElementsByTagName("input")[0].value = 20
         }
-        
+
     })
-    
+
 }
 main()
