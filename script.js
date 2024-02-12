@@ -22,7 +22,8 @@ function formatTime(totalSeconds) {
 async function getsongs(folder) {
     currfolder = folder;
     let a = await fetch(`/${folder}/`)
-    // console.log(a, "a")
+    console.log(a, "a")
+    console.log(folder)
     let response = await a.text();
     // console.log(response,"response")
     let div = document.createElement("div")
