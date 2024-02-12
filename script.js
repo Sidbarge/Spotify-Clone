@@ -23,7 +23,9 @@ function formatTime(totalSeconds) {
 
 async function getsongs() {
     let a = await fetch("songs/")
+    console.log(a,"a")
     let response = await a.text();
+    console.log(response,"response")
     let div = document.createElement("div")
     div.innerHTML = response
     let as = div.getElementsByTagName("a")
