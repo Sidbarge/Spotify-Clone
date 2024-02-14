@@ -1,4 +1,4 @@
-console.log("Hello")
+console.log("Lets write Javascript")
 let currSong = new Audio()
 let songs;
 let currfolder;
@@ -22,11 +22,7 @@ function formatTime(totalSeconds) {
 async function getsongs(folder) {
     currfolder = folder;
     let a = await fetch(`/${folder}/`)
-    // console.log(a, "a")
-    console.log(folder,folder)
     let response = await a.text();
-
-    // console.log(response,"response")
     let div = document.createElement("div")
     div.innerHTML = response
     let as = div.getElementsByTagName("a")
@@ -35,6 +31,7 @@ async function getsongs(folder) {
         const element = as[index];
         if (element.href.endsWith(".mp3")) {
             songs.push(element.href.split(`/${folder}/`)[1])
+            console.log(element.href,"123")
         }
     }
     //Shows all the songs in the playlist
@@ -98,8 +95,9 @@ async function displayAlbums() {
 
 
         if (e.href.includes("/songs/") && !e.href.includes(".htaccess")) {
-            let folder = e.href.split("/").slice(-1)[0]
-
+            console.log(e.href,"e.href")
+            let folder = e.href.split("/").slice(-2)[0]
+            console.log(folder,"folder")
             //Get the metadata of the folder
             let a = await fetch(`/songs/${folder}/info.json`)
             console.log(a,"a")
@@ -134,7 +132,7 @@ async function displayAlbums() {
 // getsongs()
 async function main() {
     //Get the list of all the songs
-    songs = await getsongs("songs/cs")
+    songs = await getsongs(`songs/cs`)
     playmusic(songs[0], true)
     // console.log(songs)
 
